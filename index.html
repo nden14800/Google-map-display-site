@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Googleマップ表示サイト</title>
+    <!-- Robotoフォントのインポート -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS変数を定義してテーマを管理 */
+        :root {
+            --background-color: #ffffff; /* ライトモードの背景色 */
+            --text-color: #333333;       /* ライトモードのテキスト色 */
+            --map-border-color: #cccccc; /* ライトモードの地図の境界線色 */
+        }
+
+        /* ダークモードのスタイル */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1a1a; /* ダークモードの背景色 */
+                --text-color: #e0e0e0;       /* ダークモードのテキスト色 */
+                --map-border-color: #555555; /* ダークモードの地図の境界線色 */
+            }
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease; /* テーマ切り替え時のアニメーション */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        #map {
+            width: 90%; /* レスポンシブ対応 */
+            max-width: 800px; /* 最大幅を設定 */
+            height: 500px; /* 地図の高さ */
+            border: 2px solid var(--map-border-color);
+            border-radius: 8px; /* 角を丸くする */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 影を追加 */
+            overflow: hidden; /* 角丸を適用するために必要 */
+            transition: border-color 0.3s ease; /* テーマ切り替え時のアニメーション */
+        }
+
+        /* モバイルデバイス向けの調整 */
+        @media (max-width: 600px) {
+            #map {
+                width: 95%; /* モバイルではさらに幅を広げる */
+                height: 350px; /* モバイルでは高さを少し低くする */
+            }
+            h1 {
+                font-size: 1.5em;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Googleマップ表示</h1>
+    <div id="map"></div>
+
+    <script>
+        // Googleマップを初期化する関数
+        function initMap() {
+            // 地図の中心となる場所（例: 東京タワー）
+            const tokyoTower = { lat: 35.658581, lng: 139.745433 };
+
+            // 地図のオプションを設定
+            const mapOptions = {
+                zoom: 15, // ズームレベル
+                center: tokyoTower, // 中心座標
+                // テーマに合わせて地図のスタイルを調整することも可能ですが、今回はデフォルトでデバイステーマに合わせます
+                // styles: [] // ここにカスタムスタイルオブジェクトを追加できます
+            };
+
+            // idが 'map' の要素に地図を生成
+            const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            // マーカーを追加（例: 東京タワーの場所に）
+            new google.maps.Marker({
+                position: tokyoTower,
+                map: map,
+                title: '東京タワー' // マーカーに表示されるタイトル
+            });
+        }
+    </script>
+    <!-- Google Maps JavaScript APIを読み込む -->
+    <!-- YOUR_API_KEY を実際のGoogle Maps APIキーに置き換えてください -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwgFjJOOJoxfG-GzbzTtKgu9Hm2g6Ud0Y&callback=initMap"></script>
+</body>
+</html>
