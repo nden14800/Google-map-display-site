@@ -12,8 +12,9 @@
             --background-color: #ffffff; /* ライトモードの背景色 */
             --text-color: #333333;       /* ライトモードのテキスト色 */
             --map-border-color: #cccccc; /* ライトモードの地図の境界線色 */
-            --input-background: #ffffff; /* ライトモードの入力欄背景色 */
-            --button-hover-bg: rgba(0, 0, 0, 0.1);
+            --input-background-color: #ffffff; /* ライトモードの入力欄背景色 */
+            --button-primary-color: #4285F4; /* ボタンの色 (Google Blue) */
+            --button-hover-color: #357ae8;
         }
 
         /* ダークモードのスタイル */
@@ -22,15 +23,14 @@
                 --background-color: #1a1a1a; /* ダークモードの背景色 */
                 --text-color: #e0e0e0;       /* ダークモードのテキスト色 */
                 --map-border-color: #555555; /* ダークモードの地図の境界線色 */
-                --input-background: #333333; /* ダークモードの入力欄背景色 */
-                --button-hover-bg: rgba(255, 255, 255, 0.1);
+                --input-background-color: #2a2a2a; /* ダークモードの入力欄背景色 */
             }
         }
 
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -39,6 +39,7 @@
             background-color: var(--background-color);
             color: var(--text-color);
             transition: background-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -46,117 +47,130 @@
             color: var(--text-color);
         }
 
-        /* --- ここから追加 --- */
-        #settings-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        /* --- ここから追加/修正したスタイル --- */
+        .settings-container {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background-color: var(--background-color);
-            padding: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            border: 1px solid var(--map-border-color);
-            z-index: 10;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 90%;
+            max-width: 800px;
+            flex-wrap: wrap; /* 画面が狭い時に折り返す */
+            justify-content: center;
         }
 
         #api-key-input {
-            padding: 8px 12px;
+            flex-grow: 1; /* スペースを埋めるように伸びる */
+            padding: 10px 15px;
             border: 1px solid var(--map-border-color);
-            border-radius: 4px;
-            background-color: var(--input-background);
+            border-radius: 6px;
+            background-color: var(--input-background-color);
             color: var(--text-color);
-            font-family: 'Roboto', sans-serif;
-            outline: none;
-            width: 280px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            min-width: 250px;
         }
 
         #api-key-input:focus {
-            border-color: #4285F4; /* Google Blue */
+            outline: none;
+            border-color: var(--button-primary-color);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
         }
 
-        #set-api-key-btn {
-            background: none;
+        #save-api-key-btn {
+            background-color: var(--button-primary-color);
+            color: white;
             border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
             cursor: pointer;
-            padding: 8px;
-            color: var(--text-color);
-            display: flex;
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        #save-api-key-btn:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        #save-api-key-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+        
+        #map-placeholder {
+            display: flex;
             justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.2s ease;
+            align-items: center;
+            text-align: center;
+            font-size: 1.1em;
+            color: var(--text-color);
+            opacity: 0.7;
+            height: 100%;
         }
-        #set-api-key-btn:hover {
-            background-color: var(--button-hover-bg);
-        }
-        /* --- ここまで追加 --- */
+        /* --- ここまで追加/修正したスタイル --- */
 
 
         #map {
-            width: 90%;
-            max-width: 800px;
-            height: 500px;
+            width: 90%; /* レスポンシブ対応 */
+            max-width: 800px; /* 最大幅を設定 */
+            height: 500px; /* 地図の高さ */
             border: 2px solid var(--map-border-color);
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            border-radius: 8px; /* 角を丸くする */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 影を追加 */
+            overflow: hidden; /* 角丸を適用するために必要 */
             transition: border-color 0.3s ease;
-            /* --- 追加 --- */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2em;
         }
 
-        /* モバイルデバイス向けの調整 */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-                text-align: center;
-                margin-top: 80px; /* 設定UIと重ならないように調整 */
-            }
-            /* --- ここから追加 --- */
-            #settings-container {
-                width: 90%;
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                justify-content: center;
-            }
-            #api-key-input {
-                width: 100%;
-            }
-            /* --- ここまで追加 --- */
-
             #map {
                 width: 95%;
                 height: 350px;
+            }
+            h1 {
+                font-size: 1.5em;
+                text-align: center;
+            }
+            .settings-container {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 設定UIを追加 -->
-    <div id="settings-container">
-        <input type="password" id="api-key-input" placeholder="Google Maps APIキーを入力">
-        <button id="set-api-key-btn" title="APIキーを設定して保存">
+    <h1>Googleマップ表示</h1>
+
+    <!-- APIキー設定エリア -->
+    <div class="settings-container">
+        <input type="text" id="api-key-input" placeholder="Google Maps APIキーを入力">
+        <button id="save-api-key-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
               <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
               <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
             </svg>
+            <span>設定</span>
         </button>
     </div>
     
-    <h1>Googleマップ表示</h1>
-    <div id="map"></div>
+    <div id="map">
+        <!-- 地図が表示されるか、キー未設定のメッセージが表示される -->
+        <div id="map-placeholder">
+            <p>APIキーを設定して地図を表示してください。</p>
+        </div>
+    </div>
 
     <script>
-        // Googleマップを初期化する関数
-        // この関数はGoogle Maps APIスクリプトからコールバックされるため、グローバルスコープに配置します
-        window.initMap = function() {
+        // Googleマップを初期化するコールバック関数。Googleのスクリプトから呼び出されるため、グローバルスコープに配置します。
+        function initMap() {
+            // 地図のプレースホルダーをクリア
+            const mapContainer = document.getElementById('map');
+            mapContainer.innerHTML = ''; 
+
             // 地図の中心となる場所（例: 東京タワー）
             const tokyoTower = { lat: 35.658581, lng: 139.745433 };
 
@@ -166,9 +180,8 @@
                 center: tokyoTower,
             };
 
-            const mapElement = document.getElementById('map');
-            mapElement.innerHTML = ''; // メッセージをクリア
-            const map = new google.maps.Map(mapElement, mapOptions);
+            // idが 'map' の要素に地図を生成
+            const map = new google.maps.Map(mapContainer, mapOptions);
 
             // マーカーを追加
             new google.maps.Marker({
@@ -178,54 +191,70 @@
             });
         }
 
+        // DOMの読み込みが完了したら実行
         document.addEventListener('DOMContentLoaded', () => {
+            // DOM要素の取得
             const apiKeyInput = document.getElementById('api-key-input');
-            const setApiKeyBtn = document.getElementById('set-api-key-btn');
+            const saveApiKeyButton = document.getElementById('save-api-key-btn');
             const mapContainer = document.getElementById('map');
+            
             const API_KEY_STORAGE_KEY = 'googleMapsApiKey';
 
-            // localStorageからAPIキーを読み込む
-            const savedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-            
-            if (savedApiKey) {
-                apiKeyInput.value = savedApiKey;
-                loadGoogleMapsScript(savedApiKey);
-            } else {
-                mapContainer.innerHTML = '<p style="padding: 20px; text-align: center;">APIキーを設定してください。</p>';
+            // Google Maps APIスクリプトを動的に読み込む関数
+            function loadGoogleMapsApi(apiKey) {
+                // 既存のスクリプトタグがあれば削除（APIキーの再設定に対応）
+                const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+                if (existingScript) {
+                    existingScript.remove();
+                }
+
+                // 新しいスクリプトタグを作成
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+                script.async = true;
+                script.defer = true;
+                
+                // スクリプトの読み込みに失敗した場合のエラーハンドリング
+                script.onerror = () => {
+                    alert('APIキーが無効か、読み込みに失敗しました。キーを確認して再設定してください。');
+                    mapContainer.innerHTML = `<div id="map-placeholder"><p>APIキーの読み込みに失敗しました。<br>正しいキーを設定してください。</p></div>`;
+                    localStorage.removeItem(API_KEY_STORAGE_KEY); // 無効なキーを削除
+                    apiKeyInput.value = '';
+                };
+
+                // スクリプトをドキュメントのheadに追加して読み込み開始
+                document.head.appendChild(script);
             }
 
             // 設定ボタンのクリックイベント
-            setApiKeyBtn.addEventListener('click', () => {
-                const newApiKey = apiKeyInput.value.trim();
-                if (newApiKey) {
-                    localStorage.setItem(API_KEY_STORAGE_KEY, newApiKey);
-                    // ページをリロードして新しいAPIキーで地図を再読み込み
-                    location.reload();
+            saveApiKeyButton.addEventListener('click', () => {
+                const apiKey = apiKeyInput.value.trim(); // 入力値の前後の空白を削除
+                if (apiKey) {
+                    // localStorageにAPIキーを保存
+                    localStorage.setItem(API_KEY_STORAGE_KEY, apiKey);
+                    // 地図を読み込み開始
+                    loadGoogleMapsApi(apiKey);
                 } else {
                     alert('APIキーを入力してください。');
                 }
             });
 
-            // Google Maps APIスクリプトを動的に読み込む関数
-            function loadGoogleMapsScript(apiKey) {
-                const script = document.createElement('script');
-                // callback=initMap を指定することで、スクリプト読み込み完了後にinitMap関数が実行される
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-                script.async = true;
-                script.defer = true;
-                
-                // APIキーが無効などの理由で読み込みに失敗した場合のエラー処理
-                script.onerror = () => {
-                    mapContainer.innerHTML = '<p style="padding: 20px; text-align: center; color: red;">APIキーが無効か、読み込みに失敗しました。<br>キーを確認して再度設定してください。</p>';
-                    // 無効なキーをlocalStorageから削除
-                    localStorage.removeItem(API_KEY_STORAGE_KEY);
-                    apiKeyInput.value = '';
-                };
-
-                document.head.appendChild(script);
+            // アプリケーションの初期化処理
+            function initializeApp() {
+                // localStorageから保存済みのAPIキーを取得
+                const savedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+                if (savedApiKey) {
+                    // キーがあれば入力欄にセット
+                    apiKeyInput.value = savedApiKey;
+                    // 地図を読み込み開始
+                    loadGoogleMapsApi(savedApiKey);
+                }
             }
+
+            // ページ読み込み時に初期化処理を実行
+            initializeApp();
         });
     </script>
-    <!-- Google Maps APIを読み込むscriptタグはJSで動的に追加するため、ここからは削除します -->
+    <!-- Google Maps APIのscriptタグは、JavaScriptによって動的に追加されるため、ここには記述しません -->
 </body>
 </html>
